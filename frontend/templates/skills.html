@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+</head>
+
+<body>
+    <header>
+        <div class="header-main">
+            <div class="header-buttons">
+                <img src="../static/img/logo.png" width="42" height="42" onclick="location.href = '/';">
+                <img src="../static/img/menu.png" width="30" height="30" onclick="menu()">
+            </div>
+            <p>Название проекта</p>
+        </div>
+    </header>
+    <main>
+        <div class="sidebar" id="mySidebar">
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item" onclick="location.href = '/relevance';">
+                        <a><p>Востребованность</p></a>
+                    </li>
+                    <li class="menu-item" onclick="location.href = '/geography';">
+                        <a><p>География</p></a>
+                    </li>
+                    <li class="menu-item" onclick="location.href = '/skills';">
+                        <a><p>Навыки</p></a>
+                    </li>
+                    <li class="menu-item" onclick="location.href = '/last-vacancies';">
+                        <a><p>Последние вакансии</p></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-main">
+            <div class="footer-text">
+                <p>Лобанов Николай Александрович</p>
+                <p>РИ-220936</p>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="../static/js/script.js"></script>
+</body>
+
+</html>

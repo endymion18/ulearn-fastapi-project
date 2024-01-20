@@ -39,15 +39,7 @@ body {
     width: 100px;
 }
 
-.header-buttons button {
-    background-color: white;
-    padding: 0;
-    border: 0;
-    align-items: center;
-    height: 30px;
-}
-
-.header-buttons button:hover {
+.header-buttons img:hover {
     background-color: rgb(207, 207, 207);
 
 }
