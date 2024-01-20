@@ -10,7 +10,6 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
-    border-top: 1px solid rgba(200, 200, 200, 0.85);
 }
 
 .footer-main {
@@ -18,18 +17,19 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    min-height: 50px;
-    z-index: 1;
+    border-top: 1px solid rgba(200, 200, 200, 0.85);
 }
 
 .header-main {
     background-color: white;
     font-size: 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 25px;
     border-bottom: 1px solid rgba(200, 200, 200, 0.85);
+    position:fixed;
+    min-height: 75px;
+    z-index: 1;
+    width:100%;
+    margin:0;
+    top:0;
 }
 
 .header-buttons {
@@ -37,6 +37,13 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100px;
+}
+
+.header-items {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 25px;
 }
 
 .header-buttons img:hover {
@@ -76,4 +83,30 @@ body {
 
 .menu-item:hover{
     background-color: #058679;
+}
+
+.main-content{
+    margin:0;
+    margin:75px auto 60px;
+    padding-top: 20px;
+    max-width: 900px;
+    text-align:center;
+}
+
+.vacancy-name{
+    padding: 10px;
+    margin:0;
+    font-weight: 700;
+    font-size: 26px;
+}
+
+.vacancy-description{
+    margin:0;
+    padding: 10px;
+    font-size: 20px;
+    text-align: justify;
+}
+
+.gallery img{
+    padding-top:10px;
 }
