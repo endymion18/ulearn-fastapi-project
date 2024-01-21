@@ -24,12 +24,12 @@ body {
     background-color: white;
     font-size: 22px;
     border-bottom: 1px solid rgba(200, 200, 200, 0.85);
-    position:fixed;
+    position: fixed;
     min-height: 75px;
     z-index: 1;
-    width:100%;
-    margin:0;
-    top:0;
+    width: 100%;
+    margin: 0;
+    top: 0;
 }
 
 .header-buttons {
@@ -54,8 +54,8 @@ body {
 .sidebar-menu {
     background-color: #049789;
     height: 100%;
-    width: 250px; 
-    position: fixed; 
+    width: 250px;
+    position: fixed;
     left: 0;
     padding: 20px 0;
 }
@@ -73,7 +73,7 @@ body {
 }
 
 .menu-item {
-    color:whitesmoke;
+    color: whitesmoke;
     font-size: 18px;
     font-weight: 400;
     width: 250px;
@@ -81,32 +81,55 @@ body {
     margin: 0 0 10px;
 }
 
-.menu-item:hover{
+.menu-item:hover {
     background-color: #058679;
 }
 
-.main-content{
-    margin:0;
-    margin:75px auto 60px;
+.main-content {
+    margin: 0;
+    margin: 75px auto 60px;
     padding-top: 20px;
     max-width: 900px;
-    text-align:center;
+    text-align: center;
 }
 
-.content-header{
+.content-header {
     padding: 10px;
-    margin:0;
+    margin: 0;
     font-weight: 700;
     font-size: 26px;
 }
 
-.vacancy-description{
-    margin:0;
+.vacancy-description {
+    margin: 0;
     padding: 10px;
     font-size: 20px;
     text-align: justify;
 }
 
-.gallery img{
-    padding-top:10px;
+.gallery img {
+    padding-top: 10px;
+}
+
+.statistics img {
+    margin: 10px;
+}
+
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #bdbdbd;
+    border-collapse: collapse;
+}
+
+.table th {
+    font-weight: bold;
+    padding: 5px;
+    background: #efefef;
+    border: 1px solid #bdbdbd;
+}
+
+.table td {
+    border: 1px solid #bdbdbd;
+    padding: 5px;
 }

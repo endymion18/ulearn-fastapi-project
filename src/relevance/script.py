@@ -3,6 +3,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
+def df_to_list(df: pd.DataFrame, vacancy_name: str) -> list:
+    indexes = ['Год',
+               'Средняя зарплата',
+               'Количество вакансий',
+               f'Средняя зарплата - \n{vacancy_name}',
+               f'Количество вакансий - \n{vacancy_name}']
+
+    df = df.reset_index()
+    table_data = list(df.values.tolist())
+    for i in range(len(table_data)):
+        table_data[i] = [int(item) for item in table_data[i]]
+    table_data.insert(0, indexes)
+
+    return table_data
+
+
 def get_vacancies_dataframe(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filename, names=['название', 'навыки', 'от', 'до', 'валюта', 'Город', 'Год'], dtype={
         'название': 'string',
@@ -56,8 +72,7 @@ def get_stats_by_city(vacancies_df: pd.DataFrame) -> [pd.DataFrame, pd.DataFrame
     return salaries_by_cities, vacancies_rates
 
 
-def create_report_by_years(filename: str, vacancy_name: str) -> [pd.DataFrame, pd.DataFrame, pd.DataFrame,
-                                                                 pd.DataFrame]:
+def create_report_by_years(filename: str, vacancy_name: str) -> pd.DataFrame:
     df = get_vacancies_dataframe(filename)
     filtered_df = df[df['название'].str.contains(vacancy_name, flags=re.IGNORECASE)]
 
@@ -67,9 +82,9 @@ def create_report_by_years(filename: str, vacancy_name: str) -> [pd.DataFrame, p
         columns={'Средняя з/п': f'з/п {vacancy_name}',
                  'Количество вакансий': f'Количество вакансий {vacancy_name}'})
 
-    return salaries_by_years[['Средняя з/п']], salaries_by_years[['Количество вакансий']], \
-        salaries_by_years_for_name[[f'з/п {vacancy_name}']], salaries_by_years_for_name[
-        [f'Количество вакансий {vacancy_name}']]
+    combined_stats_by_years = pd.merge(salaries_by_years, salaries_by_years_for_name, on='Год', how='outer').fillna(0)
+
+    return combined_stats_by_years
 
 
 def create_plots():
@@ -81,25 +96,25 @@ def create_plots():
     fig1, sub1 = plt.subplots(2, 2)
     fig2, sub2 = plt.subplots(2, 2)
 
-    report_data_by_years[0].plot(ax=sub1[0, 0], kind='bar')
+    report_data_by_years[['Средняя з/п']].plot(ax=sub1[0, 0], kind='bar')
     sub1[0, 0].set_title('Динамика уровня зарплат по годам', wrap=True)
     sub1[0, 0].grid(True, axis='y')
     sub1[0, 0].legend(fontsize=8, loc='upper left')
     sub1[0, 0].tick_params(labelsize=8)
 
-    report_data_by_years[1].plot(ax=sub1[0, 1], kind='bar')
+    report_data_by_years[['Количество вакансий']].plot(ax=sub1[0, 1], kind='bar')
     sub1[0, 1].set_title('Динамика количества вакансий по годам', wrap=True)
     sub1[0, 1].grid(True, axis='y')
     sub1[0, 1].legend(fontsize=8, loc='upper left')
     sub1[0, 1].tick_params(labelsize=8)
 
-    report_data_by_years[2].plot(ax=sub1[1, 0], kind='bar')
+    report_data_by_years[[f'з/п {vac}']].plot(ax=sub1[1, 0], kind='bar')
     sub1[1, 0].set_title(f'Динамика уровня зарплат по годам для {vac}', wrap=True)
     sub1[1, 0].grid(True, axis='y')
     sub1[1, 0].legend(fontsize=8, loc='upper left')
     sub1[1, 0].tick_params(labelsize=8)
 
-    report_data_by_years[3].plot(ax=sub1[1, 1], kind='bar')
+    report_data_by_years[[f'Количество вакансий {vac}']].plot(ax=sub1[1, 1], kind='bar')
     sub1[1, 1].set_title(f'Динамика количества вакансий по годам для {vac}', wrap=True)
     sub1[1, 1].grid(True, axis='y')
     sub1[1, 1].legend(fontsize=8, loc='upper left')
@@ -108,10 +123,9 @@ def create_plots():
     fig1.tight_layout()
     fig1.savefig('relevance.png', dpi=200)
 
-    return report_data_by_years[0].reset_index().values.tolist(), \
-        report_data_by_years[1].reset_index().values.tolist(), \
-        report_data_by_years[2].reset_index().values.tolist(), \
-        report_data_by_years[3].reset_index().values.tolist()
+    return df_to_list(report_data_by_years, vac)
 
 
-create_plots()
+with open('table_list.txt', mode='w', encoding='utf-8') as file:
+    data = str(create_plots()).replace('\'', '\"')
+    file.write('{"data": %s}' % data)
