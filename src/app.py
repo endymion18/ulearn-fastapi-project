@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from pages.router import pages_router
+from src.pages.router import pages_router
 
 app = FastAPI(
     title="Ulearn FastAPI Project"
