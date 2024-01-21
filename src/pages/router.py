@@ -9,7 +9,7 @@ pages_router = APIRouter()
 
 @pages_router.get("/")
 async def get_base_page(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse("index.html", {"request": request, "vacancy_name": "DevOps-Инженер"})
 
 
 @pages_router.get("/relevance")
