@@ -5,5 +5,5 @@ __pycache__/
 
 .env
 /src/csv_data/vacancies.csv
-/src/csv_data/.png
 /src/csv_data/relevance.png
+/src/csv_data/geography.png
