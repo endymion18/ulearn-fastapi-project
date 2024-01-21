@@ -4,6 +4,6 @@ __pycache__/
 **/venv/
 
 .env
-/src/relevance/vacancies.csv
-/src/relevance/.png
-/src/relevance/relevance.png
+/src/csv_data/vacancies.csv
+/src/csv_data/.png
+/src/csv_data/relevance.png
