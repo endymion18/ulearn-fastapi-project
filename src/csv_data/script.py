@@ -1,4 +1,6 @@
 import re
+import time
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -52,6 +54,9 @@ def get_vacancies_dataframe(filename: str) -> pd.DataFrame:
         lambda published_at: int(re.sub(r'(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):([0-9+]{7})', r'\1', published_at)))
     df['Средняя з/п'] = df[['от', 'до']].fillna(0).mean(axis=1).astype(int)
 
+    end_time = time.time()
+    print(f"csv считан за {end_time-start_time}")
+
     return df
 
 
@@ -90,6 +95,18 @@ def get_stats_by_city(vacancies_df: pd.DataFrame) -> [pd.DataFrame, pd.DataFrame
     return salaries_by_cities, vacancies_rates
 
 
+def get_skills_stats(df: pd.DataFrame) -> dict:
+    tables_data = {}
+    df = df.copy()
+    df = df.dropna(subset=['навыки'])
+    df['навыки'] = df['навыки'].apply(lambda x: (x.split('\n')))
+    df = df.explode('навыки')[['навыки', 'Год']].groupby('Год', as_index=False).value_counts()
+    for year in df['Год'].unique():
+        tables_data[str(year)] = df.loc[df['Год'] == year][['навыки', 'count']].head(20).to_numpy().tolist()
+
+    return tables_data
+
+
 def create_report(filename: str, vacancy_name: str) -> [pd.DataFrame]:
     df = get_vacancies_dataframe(filename)
     filtered_df = df[df['название'].str.contains(vacancy_name, flags=re.IGNORECASE)]
@@ -105,7 +122,10 @@ def create_report(filename: str, vacancy_name: str) -> [pd.DataFrame]:
     salaries_by_cities = get_stats_by_city(df)
     salaries_by_cities_for_name = get_stats_by_city(filtered_df)
 
-    return combined_stats_by_years, salaries_by_cities, salaries_by_cities_for_name
+    skills_stats = get_skills_stats(df)
+    skills_stats_for_name = get_skills_stats(filtered_df)
+
+    return combined_stats_by_years, salaries_by_cities, salaries_by_cities_for_name, skills_stats, skills_stats_for_name
 
 
 def create_relevance_data(report_data_by_years: pd.DataFrame, vacancy_name: str):
@@ -191,14 +211,22 @@ def parse_csv():
     report = create_report(csv, vac)
     report_by_years = report[0]
     report_by_city = report[1:3]
+    skills_stats_by_years = list(report[3:5])
 
     with open('table_list.txt', mode='w', encoding='utf-8') as file:
         geography = str(create_geography_data(report_by_city, vac)).replace('\'', '\"')
         relevance = str(create_relevance_data(report_by_years, vac)).replace('\'', '\"')
+        skills = str(skills_stats_by_years).replace('\'', '\"')
         file.write('JSON для востребованности\n')
         file.write('{"data": %s}\n' % relevance)
         file.write('JSON для географии\n')
         file.write('{"data": %s}\n' % geography)
+        file.write('JSON для навыков\n')
+        file.write('{"data": %s}\n' % skills)
+
+    end_time = time.time()
+    print(f"Время выполнения: {end_time-start_time}")
 
 
+start_time = time.time()
 parse_csv()

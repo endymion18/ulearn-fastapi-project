@@ -36,3 +36,12 @@ class GeographyPage(Base):
     table_data: Mapped[Type] = mapped_column(JSON, nullable=True)
     img_path: Mapped[Type] = mapped_column(String(length=50), nullable=True)
 
+
+class SkillsPage(Base):
+    __tablename__ = 'skills_page'
+
+    id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
+    value: Mapped[str] = mapped_column(String(length=10), nullable=False)
+    table_data: Mapped[Type] = mapped_column(JSON, nullable=True)
+    img_path: Mapped[Type] = mapped_column(String(length=50), nullable=True)
+

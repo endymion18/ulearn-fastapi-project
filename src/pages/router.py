@@ -42,8 +42,14 @@ async def get_geography_page(request: Request, session: AsyncSession = Depends(g
 
 
 @pages_router.get("/skills")
-async def get_skills_page(request: Request):
-    return templates.TemplateResponse("skills.html", {"request": request})
+async def get_skills_page(request: Request, session: AsyncSession = Depends(get_async_session)):
+    skills_page_values = await get_graphics_and_tables("skills", session)
+    tables_names = ['ТОП-20 навыков по годам',
+                    'ТОП-20 навыков по годам для выбранной профессии']
+    return templates.TemplateResponse("skills.html", {"request": request,
+                                                      "tables": skills_page_values,
+                                                      "tables_names": tables_names,
+                                                      "table_len": len(tables_names)})
 
 
 @pages_router.get("/last-vacancies")

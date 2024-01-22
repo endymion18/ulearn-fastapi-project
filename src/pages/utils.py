@@ -3,7 +3,7 @@ from typing import Type
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models.models import MainPage, RelevancePage, GeographyPage
+from src.models.models import MainPage, RelevancePage, GeographyPage, SkillsPage
 
 
 async def get_base_page_values(session: AsyncSession) -> MainPage:
@@ -22,7 +22,7 @@ async def get_graphics_and_tables(table_name: str,
         case 'relevance':
             table = RelevancePage
         case 'skills':
-            table = None
+            table = SkillsPage
         case default:
             table = None
 
