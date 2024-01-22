@@ -109,7 +109,10 @@ def get_skills_stats(df: pd.DataFrame) -> dict:
 
 def create_report(filename: str, vacancy_name: str) -> [pd.DataFrame]:
     df = get_vacancies_dataframe(filename)
-    filtered_df = df[df['название'].str.contains(vacancy_name, flags=re.IGNORECASE)]
+    if vacancy_name not in vacancies_names:
+        filtered_df = df[df['название'].str.contains(vacancy_name, flags=re.IGNORECASE)]
+    else:
+        filtered_df = df[df['название'].str.contains("|".join(vacancies_names[vacancy_name]), flags=re.IGNORECASE)]
 
     salaries_by_years = get_vacancies_stats_by_year(df)
     salaries_by_years_for_name = get_vacancies_stats_by_year(filtered_df)
@@ -227,6 +230,10 @@ def parse_csv():
     end_time = time.time()
     print(f"Время выполнения: {end_time-start_time}")
 
+
+vacancies_names = {
+    "Devops-инженер": ('devops', 'development operations')
+}
 
 start_time = time.time()
 parse_csv()
