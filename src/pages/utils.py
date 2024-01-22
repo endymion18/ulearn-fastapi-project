@@ -15,7 +15,7 @@ async def get_base_page_values(session: AsyncSession) -> MainPage:
 
 
 async def get_graphics_and_tables(table_name: str,
-                                  session: AsyncSession) -> RelevancePage | GeographyPage:
+                                  session: AsyncSession):
     match table_name:
         case 'geography':
             table = GeographyPage

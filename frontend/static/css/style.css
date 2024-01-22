@@ -156,3 +156,18 @@ body {
 .tables .table {
     margin-bottom: 15px;
 }
+
+.skills-tables {
+    margin-left: -15vw;
+    margin-right: -15vw;
+}
+
+.skills-tables p{
+    margin: 15px 0 0;
+    font-weight: 700;
+}
+
+.skills-table{
+    overflow-x:scroll
+}
+

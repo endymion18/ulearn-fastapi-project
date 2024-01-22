@@ -1,3 +1,38 @@
 {% extends 'sample.html' %}
 {% block content %}
+<div class="relevance">
+    <p class="content-header">Статистика ключевых навыков</p>
+    <div class="statistics">
+        <div class="skills-tables">
+            {% for i in range(tables_len) %}
+            <p>{{ tables_names[i] }}</p>
+            <div class="skills-table">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% for year in tables[i] %}
+                        <th colspan="2">{{ year }}</th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for year in tables[i] %}
+                        <th>Навык</th>
+                        <th>Частота</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    {% for j in range(20) %}
+                    <tr>
+                        {% for year in tables[i] %}
+                        <td>{{tables[i][year][j][0]}}</td>
+                        <td>{{tables[i][year][j][1]}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
