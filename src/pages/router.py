@@ -4,7 +4,7 @@ from starlette.templating import Jinja2Templates
 from fastapi import APIRouter, Depends
 
 from src.database import get_async_session
-from src.pages.utils import get_base_page_values, get_relevance_page_values
+from src.pages.utils import get_base_page_values, get_graphics_and_tables
 
 templates = Jinja2Templates(directory="../frontend/templates")
 
@@ -23,21 +23,29 @@ async def get_base_page(request: Request, session: AsyncSession = Depends(get_as
 
 @pages_router.get("/relevance")
 async def get_relevance_page(request: Request, session: AsyncSession = Depends(get_async_session)):
-    relevance_page_values = await get_relevance_page_values(session)
+    relevance_page_values = await get_graphics_and_tables("relevance", session)
     return templates.TemplateResponse("relevance.html", {"request": request,
                                                          "table_data": relevance_page_values})
 
 
 @pages_router.get("/geography")
-async def get_relevance_page(request: Request):
-    return templates.TemplateResponse(request=request, name="geography.html")
+async def get_geography_page(request: Request, session: AsyncSession = Depends(get_async_session)):
+    geography_page_values = await get_graphics_and_tables("geography", session)
+    tables_names = ['Уровень зарплат по городам',
+                    'Доля вакансий по городам',
+                    'Уровень зарплат по городам для выбранной профессии',
+                    'Доля вакансий по городам для выбранной профессии']
+    return templates.TemplateResponse("geography.html", {"request": request,
+                                                         "tables": geography_page_values,
+                                                         "tables_names": tables_names,
+                                                         "table_len": len(tables_names)})
 
 
 @pages_router.get("/skills")
 async def get_skills_page(request: Request):
-    return templates.TemplateResponse(request=request, name="skills.html")
+    return templates.TemplateResponse("skills.html", {"request": request})
 
 
 @pages_router.get("/last-vacancies")
 async def get_last_vacancies_page(request: Request):
-    return templates.TemplateResponse(request=request, name="last-vacancies.html")
+    return templates.TemplateResponse("last-vacancies.html", {"request": request})

@@ -1,7 +1,9 @@
+from typing import Type
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models.models import MainPage, RelevancePage
+from src.models.models import MainPage, RelevancePage, GeographyPage
 
 
 async def get_base_page_values(session: AsyncSession) -> MainPage:
@@ -12,12 +14,22 @@ async def get_base_page_values(session: AsyncSession) -> MainPage:
     return page_values.scalar()
 
 
-async def get_relevance_page_values(session: AsyncSession) -> RelevancePage:
-    page_values = await session.execute(select(RelevancePage).where(RelevancePage.value == 'new'))
+async def get_graphics_and_tables(table_name: str,
+                                  session: AsyncSession) -> RelevancePage | GeographyPage:
+    match table_name:
+        case 'geography':
+            table = GeographyPage
+        case 'relevance':
+            table = RelevancePage
+        case 'skills':
+            table = None
+        case default:
+            table = None
+
+    page_values = await session.execute(select(table).where(table.value == 'new'))
     if page_values.scalar() is None:
-        page_values = await session.execute(select(RelevancePage).where(RelevancePage.value == 'default'))
+        page_values = await session.execute(select(table).where(table.value == 'default'))
 
     table_data = page_values.scalar().table_data['data']
 
     return table_data
-

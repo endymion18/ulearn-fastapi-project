@@ -1,31 +1,33 @@
 {% extends 'sample.html' %}
 {% block content %}
 <div class="relevance">
-    <p class="content-header">Статистика востребованности вакансии</p>
+    <p class="content-header">Статистика расположенности вакансии</p>
     <div class="statistics">
         <img src="../static/img/geography_default.png" width="750">
-        <table class="table">
-            <thead>
-                <tr>
-                    {% for cell in table_data[0] %}
+        <div class="tables">
+            {% for i in range(table_len) %}
+            <div class="table-wrapper">
+                <p>{{ tables_names[i] }}</p>
+                <table class="table geography-table">
+                    <thead>
+                    <tr>
+                        {% for cell in tables[i][0] %}
+                        <th>{{ cell }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
 
-                    <th>{{ cell }}</th>
-
+                    {% for row in tables[i][1:-1] %}
+                    <tr>
+                        {% for cell in row %}
+                        <td class="table_cell">{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-            </thead>
-
-
-            {% for row in table_data[1:-1] %}
-            <tr>
-                {% for cell in row %}
-                <td class="table_cell">
-                    {{ cell }}
-                </td>
-                {% endfor %}
-            </tr>
+                </table>
+            </div>
             {% endfor %}
-        </table>
+        </div>
     </div>
 </div>
 {% endblock %}

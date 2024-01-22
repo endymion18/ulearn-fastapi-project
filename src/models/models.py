@@ -33,6 +33,6 @@ class GeographyPage(Base):
 
     id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
     value: Mapped[str] = mapped_column(String(length=10), nullable=False)
-    tables: Mapped[Type] = mapped_column(JSON, nullable=True)
+    table_data: Mapped[Type] = mapped_column(JSON, nullable=True)
     img_path: Mapped[Type] = mapped_column(String(length=50), nullable=True)
 
