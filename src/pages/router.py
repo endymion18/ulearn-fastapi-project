@@ -46,11 +46,6 @@ async def get_skills_page(request: Request, session: AsyncSession = Depends(get_
     skills_page_values = await get_graphics_and_tables("skills", session)
     tables_names = ['ТОП-20 навыков по годам',
                     'ТОП-20 навыков по годам для выбранной профессии']
-    for table in skills_page_values:
-        for year in table:
-            print(year)
-            print(table[year])
-
     return templates.TemplateResponse("skills.html", {"request": request,
                                                       "tables": skills_page_values,
                                                       "tables_names": tables_names,

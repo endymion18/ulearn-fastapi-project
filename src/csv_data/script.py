@@ -132,7 +132,7 @@ def create_report(filename: str, vacancy_name: str) -> [pd.DataFrame]:
 
 
 def create_relevance_data(report_data_by_years: pd.DataFrame, vacancy_name: str):
-    fig, sub = plt.subplots(2, 2)
+    fig, sub = plt.subplots(2, 2, layout="constrained")
 
     report_data_by_years[['Средняя з/п']].plot(ax=sub[0, 0], kind='bar')
     sub[0, 0].set_title('Динамика уровня зарплат по годам', wrap=True)
@@ -158,7 +158,6 @@ def create_relevance_data(report_data_by_years: pd.DataFrame, vacancy_name: str)
     sub[1, 1].legend(fontsize=8, loc='upper left')
     sub[1, 1].tick_params(labelsize=8)
 
-    fig.tight_layout()
     fig.savefig('relevance.png', dpi=200)
 
     return create_relevance_table(report_data_by_years, vacancy_name)
@@ -167,7 +166,7 @@ def create_relevance_data(report_data_by_years: pd.DataFrame, vacancy_name: str)
 def create_geography_data(report_data_by_cities: [pd.Series], vacancy_name: str):
     salaries_by_cities, salaries_by_cities_for_name = report_data_by_cities
 
-    fig, sub = plt.subplots(2, 2)
+    fig, sub = plt.subplots(2, 2, layout="constrained")
 
     salaries_by_cities[0].plot(ax=sub[0, 0], kind='barh').invert_yaxis()
     sub[0, 0].set_title('Уровень зарплат по городам', wrap=True)
@@ -184,7 +183,7 @@ def create_geography_data(report_data_by_cities: [pd.Series], vacancy_name: str)
     sub[0, 1].tick_params(labelsize=6)
 
     salaries_by_cities_for_name[0].plot(ax=sub[1, 0], kind='barh').invert_yaxis()
-    sub[1, 0].set_title(f'Уровень зарплат по городам\nдля вакансии {vacancy_name}', wrap=True)
+    sub[1, 0].set_title(f'Уровень зарплат по городам\nдля {vacancy_name}', wrap=True)
     sub[1, 0].grid(True, axis='x')
     sub[1, 0].tick_params(axis='y', labelsize=6)
     sub[1, 0].tick_params(axis='x', labelsize=8)
@@ -194,10 +193,9 @@ def create_geography_data(report_data_by_cities: [pd.Series], vacancy_name: str)
         ticklabel.set_va('center')
 
     salaries_by_cities_for_name[1].plot(ax=sub[1, 1], kind='pie', textprops={'fontsize': 6})
-    sub[1, 1].set_title(f'Доля вакансий по городам\nдля вакансии {vacancy_name}', wrap=True)
+    sub[1, 1].set_title(f'Доля вакансий по городам\nдля {vacancy_name}', wrap=True)
     sub[1, 1].tick_params(labelsize=6)
 
-    fig.tight_layout()
     fig.savefig('geography.png', dpi=200)
 
     first_table_data = create_salary_table(salaries_by_cities[0])
