@@ -45,3 +45,10 @@ class SkillsPage(Base):
     table_data: Mapped[Type] = mapped_column(JSON, nullable=True)
     img_path: Mapped[Type] = mapped_column(String(length=50), nullable=True)
 
+
+class CurrentVacancy(Base):
+    __tablename__ = 'current_vacancy'
+
+    id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
+    value: Mapped[str] = mapped_column(String(length=10), nullable=False)
+    vacancy_name: Mapped[str] = mapped_column(String(length=30), nullable=False)

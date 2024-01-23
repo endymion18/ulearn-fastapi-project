@@ -1,10 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
+from starlette.responses import JSONResponse
 from starlette.templating import Jinja2Templates
 from fastapi import APIRouter, Depends
 
 from src.database import get_async_session
-from src.pages.utils import get_base_page_values, get_graphics_and_tables
+from src.pages.utils import get_base_page_values, get_graphics_and_tables, get_current_vacancy_name, get_last_vacancies
 
 templates = Jinja2Templates(directory="../frontend/templates")
 
@@ -53,5 +54,9 @@ async def get_skills_page(request: Request, session: AsyncSession = Depends(get_
 
 
 @pages_router.get("/last-vacancies")
-async def get_last_vacancies_page(request: Request):
-    return templates.TemplateResponse("last-vacancies.html", {"request": request})
+async def get_last_vacancies_page(request: Request, session: AsyncSession = Depends(get_async_session)):
+    last_vacancies = await get_last_vacancies(session)
+    if last_vacancies is None:
+        return JSONResponse(status_code=400, content={"detail": "Server error"})
+    return templates.TemplateResponse("last-vacancies.html", {"request": request,
+                                                              "vacancies": last_vacancies})

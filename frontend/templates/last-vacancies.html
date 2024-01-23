@@ -1,3 +1,17 @@
 {% extends 'sample.html' %}
 {% block content %}
+<div>
+    <p class="content-header">Последние вакансии по выбранной профессии</p>
+    <div class="vacancies">
+    {% for vacancy in vacancies %}
+        <div class="vacancy-card">
+            <p class="vacancy-name">{{vacancy['name']}}</p>
+            <p class="company-name">{{vacancy['company']}}</p>
+            <p class="company-name">{{vacancy['salary']}}</p>
+            <p>{{vacancy['area_name']}}</p>
+            <p>{{vacancy['published_at']}}</p>
+        </div>
+    {% endfor %}
+    </div>
+</div>
 {% endblock %}

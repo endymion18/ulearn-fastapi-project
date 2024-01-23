@@ -171,3 +171,35 @@ body {
     overflow-x:scroll
 }
 
+.vacancy-card {
+    margin: 0;
+    padding: 0;
+    width: 165px;
+    height: 360px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.vacancy-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.vacancies {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+.vacancy-name {
+    font-weight: 700;
+    height: 70px;
+    text-align: center;
+}
+
+.company-name {
+    height: 45px;
+}
