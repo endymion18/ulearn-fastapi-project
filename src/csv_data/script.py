@@ -50,12 +50,19 @@ def get_vacancies_dataframe(filename: str) -> pd.DataFrame:
         'год': 'string',
     }, skiprows=1)
 
+    end_time = time.time()
+    print(f"csv считан за {end_time - start_time}")
+
+    df['Средняя з/п'] = df[['от', 'до']].fillna(0).mean(axis=1).astype(int)
+    df['Средняя з/п'] = df[['Средняя з/п', 'валюта']].apply(
+        lambda row: currency_to_rub[row['валюта']] * row['Средняя з/п'] if row['валюта'] in currency_to_rub else 0,
+        axis=1)
+    df = df[df['Средняя з/п'] < 10000000]
     df['Год'] = df['Год'].apply(
         lambda published_at: int(re.sub(r'(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):([0-9+]{7})', r'\1', published_at)))
-    df['Средняя з/п'] = df[['от', 'до']].fillna(0).mean(axis=1).astype(int)
 
     end_time = time.time()
-    print(f"csv считан за {end_time-start_time}")
+    print(f"Конвертация данных: {end_time - start_time}")
 
     return df
 
@@ -109,7 +116,7 @@ def get_skills_stats(df: pd.DataFrame) -> dict:
 
 def create_report(filename: str, vacancy_name: str) -> [pd.DataFrame]:
     df = get_vacancies_dataframe(filename)
-    if vacancy_name not in vacancies_names:
+    if vacancy_name.lower() not in vacancies_names:
         filtered_df = df[df['название'].str.contains(vacancy_name, flags=re.IGNORECASE)]
     else:
         filtered_df = df[df['название'].str.contains("|".join(vacancies_names[vacancy_name]), flags=re.IGNORECASE)]
@@ -226,11 +233,25 @@ def parse_csv():
         file.write('{"data": %s}\n' % skills)
 
     end_time = time.time()
-    print(f"Время выполнения: {end_time-start_time}")
+    print(f"Время выполнения: {end_time - start_time}")
 
 
 vacancies_names = {
-    "Devops-инженер": ('devops', 'development operations')
+    "devops-инженер": ('devops', 'development operations')
+}
+
+# данные за 1 января 2023
+currency_to_rub = {
+    "AZN": 41.34,
+    "BYR": 25.70,
+    "EUR": 75.66,
+    "GEL": 21.74,
+    "KGS": 0.82,
+    "KZT": 0.15,
+    "RUR": 1,
+    "UAH": 1.91,
+    "USD": 70.34,
+    "UZS": 0.006
 }
 
 start_time = time.time()
