@@ -46,9 +46,9 @@ class SkillsPage(Base):
     img_path: Mapped[Type] = mapped_column(String(length=50), nullable=True)
 
 
-class CurrentVacancy(Base):
-    __tablename__ = 'current_vacancy'
+class User(Base):
+    __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
-    value: Mapped[str] = mapped_column(String(length=10), nullable=False)
-    vacancy_name: Mapped[str] = mapped_column(String(length=30), nullable=False)
+    name: Mapped[str] = mapped_column(String(length=20), nullable=False)
+    password: Mapped[str] = mapped_column(String(length=100), nullable=False)

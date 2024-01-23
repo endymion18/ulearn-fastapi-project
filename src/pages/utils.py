@@ -1,20 +1,21 @@
 import re
 from datetime import datetime
-from typing import Type
 
 import requests
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models.models import MainPage, RelevancePage, GeographyPage, SkillsPage, CurrentVacancy
+from src.models.models import MainPage, RelevancePage, GeographyPage, SkillsPage
 
 
 async def get_base_page_values(session: AsyncSession) -> MainPage:
     page_values = await session.execute(select(MainPage).where(MainPage.value == 'new'))
-    if page_values.scalar() is None:
+    page_values = page_values.scalar()
+    if page_values is None:
         page_values = await session.execute(select(MainPage).where(MainPage.value == 'default'))
+        page_values = page_values.scalar()
 
-    return page_values.scalar()
+    return page_values
 
 
 async def get_graphics_and_tables(table_name: str,
@@ -30,21 +31,25 @@ async def get_graphics_and_tables(table_name: str,
             table = None
 
     page_values = await session.execute(select(table).where(table.value == 'new'))
-    if page_values.scalar() is None:
+    page_values = page_values.scalar()
+    if page_values is None:
         page_values = await session.execute(select(table).where(table.value == 'default'))
+        page_values = page_values.scalar()
 
-    table_data = page_values.scalar().table_data['data']
+    table_data = page_values.table_data['data']
 
     return table_data
 
 
 async def get_current_vacancy_name(session: AsyncSession):
-    vacancy_name = await session.execute(select(CurrentVacancy.vacancy_name).where(CurrentVacancy.value == 'new'))
-    if vacancy_name.scalar() is None:
+    vacancy_name = await session.execute(select(MainPage.vacancy_name).where(MainPage.value == 'new'))
+    vacancy_name = vacancy_name.scalar()
+    if vacancy_name is None:
         vacancy_name = await session.execute(
-            select(CurrentVacancy.vacancy_name).where(CurrentVacancy.value == 'default'))
+            select(MainPage.vacancy_name).where(MainPage.value == 'default'))
+        vacancy_name = vacancy_name.scalar()
 
-    return vacancy_name.scalar()
+    return vacancy_name
 
 
 async def get_last_vacancies(session: AsyncSession):
