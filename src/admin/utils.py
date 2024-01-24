@@ -97,7 +97,7 @@ async def upload_file(path, file: File):
         uploaded_file.write(file_content)
         uploaded_file.close()
 
-    path = f"../static/img/{file.filename}"
+    path = f"./static/img/{file.filename}"
     return path
 
 

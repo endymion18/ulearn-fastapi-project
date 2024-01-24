@@ -27,7 +27,7 @@ async def change_main_page_images(files: list[UploadFile], admin: User = Depends
     if len(files) > 3:
         return JSONResponse(content={"detail": "Too much files to upload"}, status_code=400)
     else:
-        images = [await upload_file(f"../frontend/static/img/{file.filename}", file) for file in files]
+        images = [await upload_file(f"./frontend/static/img/{file.filename}", file) for file in files]
         await add_images_to_main_page(images, session)
     return "Main page images changed successfully"
 
@@ -43,7 +43,7 @@ async def change_relevance_page(change_data: ChangeStatsPage,
 @admin_router.post("/admin/relevance-page/image")
 async def change_relevance_page_image(file: UploadFile, admin: User = Depends(get_current_user),
                                       session: AsyncSession = Depends(get_async_session)):
-    images = await upload_file(f"../frontend/static/img/relevance.png", file)
+    images = await upload_file(f"./frontend/static/img/relevance.png", file)
     await add_images_path_to_db('relevance', images, session)
     return "Main page images changed successfully"
 
@@ -59,7 +59,7 @@ async def change_geography_page(change_data: ChangeStatsPage,
 @admin_router.post("/admin/geography-page/image")
 async def change_geography_page_image(file: UploadFile, admin: User = Depends(get_current_user),
                                       session: AsyncSession = Depends(get_async_session)):
-    images = await upload_file(f"../frontend/static/img/geography.png", file)
+    images = await upload_file(f"./frontend/static/img/geography.png", file)
     await add_images_path_to_db('geography', images, session)
     return "Main page images changed successfully"
 

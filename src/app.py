@@ -8,7 +8,7 @@ app = FastAPI(
     title="Ulearn FastAPI Project"
 )
 
-app.mount("/static", StaticFiles(directory="../frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 
 app.include_router(pages_router)
 app.include_router(admin_router)

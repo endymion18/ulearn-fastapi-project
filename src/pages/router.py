@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends
 from src.database import get_async_session
 from src.pages.utils import get_base_page_values, get_graphics_and_tables, get_last_vacancies
 
-templates = Jinja2Templates(directory="../frontend/templates")
+templates = Jinja2Templates(directory="./frontend/templates")
 
 pages_router = APIRouter()
 
