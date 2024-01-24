@@ -3,7 +3,7 @@
 <div class="relevance">
     <p class="content-header">Статистика востребованности вакансии</p>
     <div class="statistics">
-        <img src="../static/img/relevance_default.png" width="750">
+        <img src={{image}} width="750">
         <table class="table">
             <thead>
                 <tr>
@@ -16,7 +16,7 @@
             </thead>
 
 
-            {% for row in table_data[1:-1] %}
+            {% for row in table_data[1:] %}
             <tr>
                 {% for cell in row %}
                 <td class="table_cell">

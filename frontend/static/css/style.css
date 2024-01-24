@@ -109,10 +109,12 @@ body {
 
 .gallery img {
     padding-top: 10px;
+    max-width:600px;
 }
 
 .statistics img {
     margin: 10px;
+    max-width:600px;
 }
 
 .table {

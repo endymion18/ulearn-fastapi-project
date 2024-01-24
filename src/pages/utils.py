@@ -36,9 +36,7 @@ async def get_graphics_and_tables(table_name: str,
         page_values = await session.execute(select(table).where(table.value == 'default'))
         page_values = page_values.scalar()
 
-    table_data = page_values.table_data['data']
-
-    return table_data
+    return page_values
 
 
 async def get_current_vacancy_name(session: AsyncSession):

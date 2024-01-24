@@ -5,7 +5,7 @@ from starlette.templating import Jinja2Templates
 from fastapi import APIRouter, Depends
 
 from src.database import get_async_session
-from src.pages.utils import get_base_page_values, get_graphics_and_tables, get_current_vacancy_name, get_last_vacancies
+from src.pages.utils import get_base_page_values, get_graphics_and_tables, get_last_vacancies
 
 templates = Jinja2Templates(directory="../frontend/templates")
 
@@ -19,14 +19,17 @@ async def get_base_page(request: Request, session: AsyncSession = Depends(get_as
                                                      "vacancy_name": base_page_values.vacancy_name,
                                                      "first_paragraph": base_page_values.first_paragraph,
                                                      "second_paragraph_name": base_page_values.second_paragraph_name,
-                                                     "second_paragraph": base_page_values.second_paragraph})
+                                                     "second_paragraph": base_page_values.second_paragraph,
+                                                     "images": base_page_values.img_paths['data'] if
+                                                     base_page_values.img_paths is not None else None})
 
 
 @pages_router.get("/relevance")
 async def get_relevance_page(request: Request, session: AsyncSession = Depends(get_async_session)):
     relevance_page_values = await get_graphics_and_tables("relevance", session)
     return templates.TemplateResponse("relevance.html", {"request": request,
-                                                         "table_data": relevance_page_values})
+                                                         "table_data": relevance_page_values.table_data['data'],
+                                                         "image": relevance_page_values.img_path})
 
 
 @pages_router.get("/geography")
@@ -37,9 +40,10 @@ async def get_geography_page(request: Request, session: AsyncSession = Depends(g
                     'Уровень зарплат по городам для выбранной профессии',
                     'Доля вакансий по городам для выбранной профессии']
     return templates.TemplateResponse("geography.html", {"request": request,
-                                                         "tables": geography_page_values,
+                                                         "tables": geography_page_values.table_data['data'],
                                                          "tables_names": tables_names,
-                                                         "tables_len": len(tables_names)})
+                                                         "tables_len": len(tables_names),
+                                                         "image": geography_page_values.img_path})
 
 
 @pages_router.get("/skills")
@@ -48,7 +52,7 @@ async def get_skills_page(request: Request, session: AsyncSession = Depends(get_
     tables_names = ['ТОП-20 навыков по годам',
                     'ТОП-20 навыков по годам для выбранной профессии']
     return templates.TemplateResponse("skills.html", {"request": request,
-                                                      "tables": skills_page_values,
+                                                      "tables": skills_page_values.table_data['data'],
                                                       "tables_names": tables_names,
                                                       "tables_len": len(tables_names)})
 

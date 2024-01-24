@@ -1,5 +1,5 @@
 import jwt
-from fastapi import Depends
+from fastapi import Depends, File
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -87,6 +87,40 @@ async def change_stats_pages(table_name: str, data: ChangeStatsPage, session: As
         await session.execute(update(table).where(table.value == 'new').values(
             table_data=data.data
         ))
+
+    await session.commit()
+
+
+async def upload_file(path, file: File):
+    with open(path, "wb") as uploaded_file:
+        file_content = await file.read()
+        uploaded_file.write(file_content)
+        uploaded_file.close()
+
+    path = f"../static/img/{file.filename}"
+    return path
+
+
+async def add_images_path_to_db(table_name: str, path: str, session: AsyncSession):
+    match table_name:
+        case 'geography':
+            table = GeographyPage
+        case 'relevance':
+            table = RelevancePage
+        case default:
+            table = None
+
+    await session.execute(update(table).where(table.value == 'new').values(
+        img_path=path
+    ))
+
+    await session.commit()
+
+
+async def add_images_to_main_page(paths: list[str], session: AsyncSession):
+    await session.execute(update(MainPage).where(MainPage.value == 'new').values(
+        img_paths={"data": paths}
+    ))
 
     await session.commit()
 
